@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { getProviders, signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,25 @@ import { GoogleAuthButton } from "@/components/auth/google-auth-button";
 export function SignUpForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const googleEnabled = process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true";
+  const [googleEnabled, setGoogleEnabled] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadProviders() {
+      const providers = await getProviders();
+
+      if (!ignore) {
+        setGoogleEnabled(Boolean(providers?.google));
+      }
+    }
+
+    void loadProviders();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   async function onSubmit(formData: FormData) {
     setLoading(true);
@@ -34,7 +52,11 @@ export function SignUpForm() {
 
     if (!response.ok) {
       const data = await response.json();
-      toast.error(data.error ?? "Sign up failed.");
+      const fieldError = data?.issues?.fieldErrors
+        ? Object.values(data.issues.fieldErrors).flat().find((value: unknown) => typeof value === "string")
+        : null;
+      const formError = Array.isArray(data?.issues?.formErrors) ? data.issues.formErrors[0] : null;
+      toast.error(fieldError ?? formError ?? data.error ?? "Sign up failed.");
       return;
     }
 

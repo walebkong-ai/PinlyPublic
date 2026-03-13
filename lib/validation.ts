@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { MapCategory } from "@/types/app";
 
-const usernameRegex = /^[a-z0-9_]{3,20}$/;
+const usernameRegex = /^[a-z0-9_-]{3,20}$/;
 const mapCategoryValues = ["photo", "video", "food", "nature", "landmark", "neighborhood"] as const satisfies readonly MapCategory[];
 
 const csvArray = <T extends z.ZodTypeAny>(itemSchema: T) =>
@@ -25,7 +25,7 @@ const csvArray = <T extends z.ZodTypeAny>(itemSchema: T) =>
 
 export const signUpSchema = z.object({
   name: z.string().min(2).max(50),
-  username: z.string().regex(usernameRegex, "Use 3-20 lowercase letters, numbers, or underscores"),
+  username: z.string().regex(usernameRegex, "Use 3-20 lowercase letters, numbers, underscores, or hyphens"),
   email: z.string().email(),
   password: z.string().min(8).max(100),
   avatarUrl: z.string().url().optional().or(z.literal(""))

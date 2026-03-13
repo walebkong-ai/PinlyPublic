@@ -62,8 +62,9 @@ def main() -> None:
     if os.environ.get("ALLOW_DESTRUCTIVE_SEED"):
         print("ALLOW_DESTRUCTIVE_SEED: set (use only for intentional demo/staging reseeds)")
 
-    google_enabled = os.environ.get("NEXT_PUBLIC_GOOGLE_AUTH_ENABLED", "false").lower() == "true"
-    if google_enabled:
+    google_client_id_set = bool(os.environ.get("GOOGLE_CLIENT_ID"))
+    google_client_secret_set = bool(os.environ.get("GOOGLE_CLIENT_SECRET"))
+    if google_client_id_set or google_client_secret_set:
         google_id = "set" if os.environ.get("GOOGLE_CLIENT_ID") else "missing"
         google_secret = "set" if os.environ.get("GOOGLE_CLIENT_SECRET") else "missing"
         print(f"GOOGLE_CLIENT_ID: {google_id}")

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { getProviders, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,25 @@ import { GoogleAuthButton } from "@/components/auth/google-auth-button";
 export function SignInForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const googleEnabled = process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true";
+  const [googleEnabled, setGoogleEnabled] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadProviders() {
+      const providers = await getProviders();
+
+      if (!ignore) {
+        setGoogleEnabled(Boolean(providers?.google));
+      }
+    }
+
+    void loadProviders();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   async function onSubmit(formData: FormData) {
     setLoading(true);

@@ -23,8 +23,6 @@ Pinly is ready to deploy on Vercel with Neon Postgres and Prisma. This document 
   - Optional, required only if enabling Google auth
 - `GOOGLE_CLIENT_SECRET`
   - Optional, required only if enabling Google auth
-- `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`
-  - Set to `true` only when Google auth is fully configured
 - `MAX_UPLOAD_SIZE_MB`
   - Keep this at `4` for server uploads on Vercel
 - `BLOB_UPLOAD_PREFIX`

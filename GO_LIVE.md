@@ -99,6 +99,6 @@ This runbook is for the first real Pinly deployment on Vercel with Neon Postgres
 3. Confirm the API/page denies access.
 
 ### Optional Google auth (if enabled)
-1. Confirm `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=true` and Google OAuth env vars are set.
+1. Confirm Google OAuth env vars are set (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`).
 2. On sign-in and sign-up screens, confirm the Google button is visible.
 3. Complete Google sign-in and confirm the app lands on `/map` with a valid session.
